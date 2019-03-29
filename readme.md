@@ -25,10 +25,13 @@ The project has been tested in the lab, but not yet in real circumstances.
 
 See the fritzing sketch for details. Jumpers for switching the wifi module between pin 2,3 for normal operation and 0,1 for flashing of the ESP is not drawn but added to the actual circuit.
 
+![Hardware](Circuit/stripboard.jpg?raw=true "Hardware")
+
 # Software
 
 * Arduino
 * thingsboard for receiving data
 
 
+![Thingsboard](thingsboard/dashboard.PNG?raw=true "Thingsboard")
 
