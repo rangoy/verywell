@@ -60,6 +60,8 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and
 //#include <MedianFilter.h>
 //MedianFilter sonarFilter(FILTER_SIZE,0);
 //MedianFilter pressureFilter(FILTER_SIZE,0);
+unsigned int rejectedSonarSamples = 0;
+unsigned int samples = 0;
 
 ExponentialFilter<float> sonarFilter(5, 0);
 ExponentialFilter<float> pressureFilter(5, 0);
@@ -110,6 +112,8 @@ void loop() {
 
 boolean getAndPublishSensors(boolean publishEnabled){
 
+    samples++;
+    
     String payload = "{ ";
     
     float rawBarCM = getPressureCM();
@@ -120,13 +124,17 @@ boolean getAndPublishSensors(boolean publishEnabled){
        sonarFilter.Filter(rawSonarCM);
        payload += "\"rawSonarCM\":"; payload += rawSonarCM; payload += ",";
     }
+    else  rejectedSonarSamples++;
     
     if(rawBarCM != 0) {
        pressureFilter.Filter(rawBarCM);
     }
+    
     float barCM = pressureFilter.Current();
     float sonarCM =sonarFilter.Current();
     payload += "\"sonarCM\":"; payload += sonarCM; payload += ",";
+    payload += "\"samples\":"; payload += samples; payload += ",";
+    payload += "\"rejectedSonars\":"; payload += rejectedSonarSamples; payload += ",";
     payload += "\"barCM\":"; payload += barCM; // payload += ",";
     
   payload += "}";
@@ -140,6 +148,8 @@ boolean getAndPublishSensors(boolean publishEnabled){
    Serial.println( "sending data");
     
     client.publish( MQTT_TOPIC, attributes );
+    rejectedSonarSamples = 0;
+    samples = 0;
   }
   else {
 
