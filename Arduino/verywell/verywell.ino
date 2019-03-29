@@ -61,8 +61,8 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and
 //MedianFilter sonarFilter(FILTER_SIZE,0);
 //MedianFilter pressureFilter(FILTER_SIZE,0);
 
-ExponentialFilter<float> sonarFilter(20, 0);
-ExponentialFilter<float> pressureFilter(20, 0);
+ExponentialFilter<float> sonarFilter(5, 0);
+ExponentialFilter<float> pressureFilter(5, 0);
 
 void setup() {
   // put your setup code here, to run once:
