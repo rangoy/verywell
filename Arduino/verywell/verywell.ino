@@ -110,23 +110,25 @@ void loop() {
 
 boolean getAndPublishSensors(boolean publishEnabled){
 
+    String payload = "{ ";
+    
     float rawBarCM = getPressureCM();
     float rawSonarCM = getSonar();
-
+    payload += "\"rawBarCM\":"; payload += rawBarCM; payload += ",";
+    
     if(rawSonarCM != 0) {
        sonarFilter.Filter(rawSonarCM);
+       payload += "\"rawSonarCM\":"; payload += rawSonarCM; payload += ",";
     }
+    
     if(rawBarCM != 0) {
        pressureFilter.Filter(rawBarCM);
     }
     float barCM = pressureFilter.Current();
     float sonarCM =sonarFilter.Current();
-    
-  String payload = "{ ";
-    payload += "\"barCM\":"; payload += barCM; payload += ",";
-    payload += "\"rawBarCM\":"; payload += rawBarCM; payload += ",";
     payload += "\"sonarCM\":"; payload += sonarCM; payload += ",";
-    payload += "\"rawSonarCM\":"; payload += rawSonarCM;
+    payload += "\"barCM\":"; payload += barCM; // payload += ",";
+    
   payload += "}";
 
   Serial.println(payload);
